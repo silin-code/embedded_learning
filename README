@@ -1,0 +1,5 @@
+# Embedded Learning Log
+
+## Hardware & Toolchain
+- Development Board: STM32F103ZET6
+- Development Environment: VS Code + Keil MDK 5 + STM32CubeMX
