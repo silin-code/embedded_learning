@@ -1,0 +1,59 @@
+# ============ 系统与编辑器 ============
+.DS_Store
+Thumbs.db
+Desktop.ini
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# ============ 通用编译产物 ============
+*.o
+*.obj
+*.d
+*.dep
+*.lst
+*.lnp
+*.crf
+*.axf
+*.elf
+*.map
+*.htm
+*.sct
+*.bak
+*.dlg
+*.tra
+*.iex
+
+# ============ Keil MDK ============
+# MDK-ARM 下与工程同名的编译输出目录（RTE/DebugConfig 保留）
+**/MDK-ARM/*/
+!**/MDK-ARM/RTE/
+!**/MDK-ARM/DebugConfig/
+# 每台机器不同的界面配置
+*.uvguix.*
+
+# ============ STM32CubeMX / STM32CubeIDE ============
+.mxproject
+**/Debug/
+**/Release/
+
+# ============ IAR EWARM ============
+# Debug 目录下的 settings 是用户调试配置，可随时重新生成
+**/settings/
+*.ewt
+*.dni
+*.dbgdt
+
+# ============ CMake / Make / GCC ============
+build/
+cmake-build-*/
+CMakeCache.txt
+CMakeFiles/
+
+# ============ PlatformIO ============
+.pio/
+
+# ============ 日志 ============
+*.log
