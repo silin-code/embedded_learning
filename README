@@ -1,19 +1,19 @@
-# 嵌入式学习记录（Embedded Learning Log）
+# Embedded Learning Log
 
-## 硬件与工具链
-- 开发板：STM32F103ZET6
-- 开发环境：VS Code + Keil MDK 5 + STM32CubeMX
+## Hardware & Toolchain
+- Board: STM32F103ZET6
+- Environment: VS Code + Keil MDK 5 + STM32CubeMX
 
-## 实验记录
+## Experiment Log
 
-### 1. LED 点亮（LED_TEST）
-- 日期：2026-09-09
-- 目标：点亮开发板上的 LED
-- 实现：
-  - CubeMX 将 PF8 配置为开漏输出（GPIO_MODE_OUTPUT_OD）
-  - 主函数中 `HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET)` 输出低电平点亮 LED
-- 现象：烧录后 LED 常亮
+### 1. LED On (LED_TEST)
+- Date: 2026-09-09
+- Goal: Light up the on-board LED
+- Implementation:
+  - PF8 configured as open-drain output (GPIO_MODE_OUTPUT_OD) via CubeMX
+  - `HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET)` drives PF8 low to turn the LED on
+- Result: LED stays on after flashing
 
-## 仓库说明
-- `Drivers/`（HAL/CMSIS 库）不入库，用 CubeMX 重新生成工程即可恢复
-- `*.ioc` 为 CubeMX 工程配置，需入库
+## Repository Notes
+- `Drivers/` (HAL/CMSIS libraries) is not tracked; regenerate the project with CubeMX to restore it
+- `*.ioc` is the CubeMX project configuration and must be tracked

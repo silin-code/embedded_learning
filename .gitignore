@@ -1,4 +1,4 @@
-# ============ 系统与编辑器 ============
+# ============ OS & Editor ============
 .DS_Store
 Thumbs.db
 Desktop.ini
@@ -8,8 +8,8 @@ Desktop.ini
 *.swo
 *~
 
-# ============ 通用编译产物 ============
-# 目标文件、依赖文件、链接输出等中间产物，重新编译即可生成
+# ============ Common Build Artifacts ============
+# Object files, dependency files, and linker outputs; regenerated on rebuild
 *.o
 *.obj
 *.d
@@ -28,28 +28,31 @@ Desktop.ini
 *.iex
 
 # ============ Keil MDK ============
-# MDK-ARM 下与工程同名的目录是编译输出（.o/.axf/.hex 等），整体忽略
+# The directory under MDK-ARM named after the project holds build outputs
+# (.o/.axf/.hex etc.), ignore it entirely
 **/MDK-ARM/*/
-# 但 RTE 和 DebugConfig 是工程配置，需要入库
+# But RTE and DebugConfig are project configs and must be tracked
 !**/MDK-ARM/RTE/
 !**/MDK-ARM/DebugConfig/
-# uvguix 是 Keil 界面布局，每台机器不同，不入库
+# uvguix files are Keil GUI layouts, machine-specific, not tracked
 *.uvguix.*
 
 # ============ STM32CubeMX / STM32CubeIDE ============
-# .mxproject 是 CubeMX 私有缓存，重新打开工程会自动生成
+# .mxproject is a private CubeMX cache, regenerated when reopening the project
 .mxproject
-# IDE 编译输出目录
+# IDE build output directories
 **/Debug/
 **/Release/
-# 注意：*.ioc 是 CubeMX 工程配置文件，需要入库，这里故意不忽略
+# Note: *.ioc is the CubeMX project configuration and must be tracked,
+# so it is intentionally NOT ignored
 
-# ============ HAL / CMSIS 驱动库 ============
-# Drivers 是 CubeMX 生成的库（约 65MB），重新生成工程即可恢复，不入库
+# ============ HAL / CMSIS Driver Libraries ============
+# Drivers is the CubeMX-generated library (~65 MB); regenerate the project
+# with CubeMX to restore it, not tracked
 Drivers/
 
 # ============ IAR EWARM ============
-# Debug 目录下的 settings 是用户调试配置，可随时重新生成
+# settings under Debug is user debug configuration, regenerated anytime
 **/settings/
 *.ewt
 *.dni
@@ -64,5 +67,5 @@ CMakeFiles/
 # ============ PlatformIO ============
 .pio/
 
-# ============ 日志 ============
+# ============ Logs ============
 *.log
