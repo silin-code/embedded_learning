@@ -1,5 +1,19 @@
-# Embedded Learning Log
+# 嵌入式学习记录（Embedded Learning Log）
 
-## Hardware & Toolchain
-- Development Board: STM32F103ZET6
-- Development Environment: VS Code + Keil MDK 5 + STM32CubeMX
+## 硬件与工具链
+- 开发板：STM32F103ZET6
+- 开发环境：VS Code + Keil MDK 5 + STM32CubeMX
+
+## 实验记录
+
+### 1. LED 点亮（LED_TEST）
+- 日期：2026-09-09
+- 目标：点亮开发板上的 LED
+- 实现：
+  - CubeMX 将 PF8 配置为开漏输出（GPIO_MODE_OUTPUT_OD）
+  - 主函数中 `HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET)` 输出低电平点亮 LED
+- 现象：烧录后 LED 常亮
+
+## 仓库说明
+- `Drivers/`（HAL/CMSIS 库）不入库，用 CubeMX 重新生成工程即可恢复
+- `*.ioc` 为 CubeMX 工程配置，需入库

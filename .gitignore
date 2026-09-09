@@ -9,6 +9,7 @@ Desktop.ini
 *~
 
 # ============ 通用编译产物 ============
+# 目标文件、依赖文件、链接输出等中间产物，重新编译即可生成
 *.o
 *.obj
 *.d
@@ -27,17 +28,25 @@ Desktop.ini
 *.iex
 
 # ============ Keil MDK ============
-# MDK-ARM 下与工程同名的编译输出目录（RTE/DebugConfig 保留）
+# MDK-ARM 下与工程同名的目录是编译输出（.o/.axf/.hex 等），整体忽略
 **/MDK-ARM/*/
+# 但 RTE 和 DebugConfig 是工程配置，需要入库
 !**/MDK-ARM/RTE/
 !**/MDK-ARM/DebugConfig/
-# 每台机器不同的界面配置
+# uvguix 是 Keil 界面布局，每台机器不同，不入库
 *.uvguix.*
 
 # ============ STM32CubeMX / STM32CubeIDE ============
+# .mxproject 是 CubeMX 私有缓存，重新打开工程会自动生成
 .mxproject
+# IDE 编译输出目录
 **/Debug/
 **/Release/
+# 注意：*.ioc 是 CubeMX 工程配置文件，需要入库，这里故意不忽略
+
+# ============ HAL / CMSIS 驱动库 ============
+# Drivers 是 CubeMX 生成的库（约 65MB），重新生成工程即可恢复，不入库
+Drivers/
 
 # ============ IAR EWARM ============
 # Debug 目录下的 settings 是用户调试配置，可随时重新生成
