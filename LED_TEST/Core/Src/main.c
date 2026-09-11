@@ -87,16 +87,23 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
+  //HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, 0); // Set PF8 high
+  
+
 
   /* USER CODE END 2 */
-  HAL_GPIO_WritePin(GPIOF,GPIO_PIN_8,0);
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    HAL_GPIO_TogglePin(GPIOF,GPIO_PIN_8);
+    HAL_Delay(1000);
+    // HAL_GPIO_WritePin(GPIOF,GPIO_PIN_8,GPIO_PIN_RESET);//1 turn on LED4
+    // HAL_Delay(200);
+    // HAL_GPIO_WritePin(GPIOF,GPIO_PIN_8,GPIO_PIN_SET);//1 turn off LED4
+    // HAL_Delay(200);
     /* USER CODE END WHILE */
-
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
