@@ -43,6 +43,8 @@
 
 /* USER CODE BEGIN PV */
 
+uint16_t gleds[] ={GPIO_PIN_8, GPIO_PIN_9, GPIO_PIN_10, GPIO_PIN_11};
+const uint16_t gleds_num = sizeof(gleds)/sizeof(gleds[0]);
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -89,7 +91,11 @@ int main(void)
   /* USER CODE BEGIN 2 */
   //HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, 0); // Set PF8 high
   
-
+  //step 1:turn off all leds
+  for(int i=0;i<gleds_num;i++)
+  {
+    HAL_GPIO_WritePin(GPIOF,gleds[i],GPIO_PIN_SET);
+  }
 
   /* USER CODE END 2 */
 
@@ -97,13 +103,32 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    HAL_GPIO_TogglePin(GPIOF,GPIO_PIN_8);
-    HAL_Delay(1000);
+    //version 3
+    //Marquee running from left to right
+  for(int i=0;i<gleds_num;i++)
+  {
+    HAL_GPIO_WritePin(GPIOF,gleds[i],GPIO_PIN_RESET);//turn on LED
+    HAL_Delay(200);
+    HAL_GPIO_WritePin(GPIOF,gleds[i],GPIO_PIN_SET);//turn off LED
+  }
+ 
+    for(int i=gleds_num-1;i>=0;i--)
+  {
+    HAL_GPIO_WritePin(GPIOF,gleds[i],GPIO_PIN_RESET);//turn on LED
+    HAL_Delay(200);
+    HAL_GPIO_WritePin(GPIOF,gleds[i],GPIO_PIN_SET);//turn off LED
+  }
+    //version 2
+    // HAL_GPIO_TogglePin(GPIOF,GPIO_PIN_8);
+    // HAL_Delay(1000);
+
+    //version 1
     // HAL_GPIO_WritePin(GPIOF,GPIO_PIN_8,GPIO_PIN_RESET);//1 turn on LED4
     // HAL_Delay(200);
     // HAL_GPIO_WritePin(GPIOF,GPIO_PIN_8,GPIO_PIN_SET);//1 turn off LED4
     // HAL_Delay(200);
     /* USER CODE END WHILE */
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -165,10 +190,10 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_10|GPIO_PIN_11, GPIO_PIN_SET);
 
-  /*Configure GPIO pin : PF8 */
-  GPIO_InitStruct.Pin = GPIO_PIN_8;
+  /*Configure GPIO pins : PF8 PF9 PF10 PF11 */
+  GPIO_InitStruct.Pin = GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_10|GPIO_PIN_11;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
