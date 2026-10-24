@@ -22,7 +22,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
-#include <stdio.h>
+#include "BSP_Usart_Redir.h"
+#include "BSP_LED.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -44,7 +45,7 @@
 UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
-
+char who[32]; // 全局空间缓冲�?保存要点亮的�?
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -52,6 +53,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART1_UART_Init(void);
 /* USER CODE BEGIN PFP */
+void Usart_Ctl_LED();
 
 /* USER CODE END PFP */
 
@@ -61,9 +63,9 @@ static void MX_USART1_UART_Init(void);
 /* USER CODE END 0 */
 
 /**
- * @brief  The application entry point.
- * @retval int
- */
+  * @brief  The application entry point.
+  * @retval int
+  */
 int main(void)
 {
 
@@ -91,7 +93,9 @@ int main(void)
   MX_GPIO_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+  BSP_Usart_Init(&huart1);
   char inbuffer[32];
+  printf("Test begin...");
 
   /* USER CODE END 2 */
 
@@ -99,13 +103,21 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    // v2
-    int a=0;
-    scanf("%d",&a);
-    //fgets(inbuffer, 31, stdin);
-    printf("echo->%d\n", a);
+    Usart_Ctl_LED();
+    // v3
+    // fgets(inbuffer, 31, stdin);
+    // int a = 0;
+    // scanf("%d", &a);
+    // printf("echo->%d\n", a);
+    // BSP_Led_On(LED1);
 
-    HAL_GPIO_TogglePin(GPIOF, GPIO_PIN_8);
+    // // v2
+    // int a=0;
+    // scanf("%d",&a);
+    // //fgets(inbuffer, 31, stdin);
+    // printf("echo->%d\n", a);
+
+    // HAL_GPIO_TogglePin(GPIOF, GPIO_PIN_8);
     // v1
     //  printf("hello : %d,hello %.2f,hello: %s", 111, 3.14, "STM32F103");
     //  HAL_GPIO_TogglePin(GPIOF, GPIO_PIN_8);
@@ -118,17 +130,17 @@ int main(void)
 }
 
 /**
- * @brief System Clock Configuration
- * @retval None
- */
+  * @brief System Clock Configuration
+  * @retval None
+  */
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
   /** Initializes the RCC Oscillators according to the specified parameters
-   * in the RCC_OscInitTypeDef structure.
-   */
+  * in the RCC_OscInitTypeDef structure.
+  */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
@@ -142,8 +154,9 @@ void SystemClock_Config(void)
   }
 
   /** Initializes the CPU, AHB and APB buses clocks
-   */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
+  */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
@@ -156,10 +169,10 @@ void SystemClock_Config(void)
 }
 
 /**
- * @brief USART1 Initialization Function
- * @param None
- * @retval None
- */
+  * @brief USART1 Initialization Function
+  * @param None
+  * @retval None
+  */
 static void MX_USART1_UART_Init(void)
 {
 
@@ -185,13 +198,14 @@ static void MX_USART1_UART_Init(void)
   /* USER CODE BEGIN USART1_Init 2 */
 
   /* USER CODE END USART1_Init 2 */
+
 }
 
 /**
- * @brief GPIO Initialization Function
- * @param None
- * @retval None
- */
+  * @brief GPIO Initialization Function
+  * @param None
+  * @retval None
+  */
 static void MX_GPIO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
@@ -204,10 +218,10 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_10|GPIO_PIN_11, GPIO_PIN_SET);
 
-  /*Configure GPIO pin : PF8 */
-  GPIO_InitStruct.Pin = GPIO_PIN_8;
+  /*Configure GPIO pins : PF8 PF9 PF10 PF11 */
+  GPIO_InitStruct.Pin = GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_10|GPIO_PIN_11;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -219,54 +233,87 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-int fputc(int ch, FILE *fp)
-{
-  UNUSED(fp);
 
-  if (HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, HAL_MAX_DELAY) == HAL_OK)
+void Usart_Ctl_LED()
+{
+  int SIZE = 33;
+  fgets(who, SIZE - 1, stdin);
+  if (strncasecmp(who, "LED1", strlen("LED1")) == 0)
   {
-    return ch;
+    printf("LED1 开始闪烁...\n");
+    LED_Link(LED1);
   }
-  return EOF;
-}
-
-int fgetc(FILE *fp)
-{
-  UNUSED(fp);
-  static uint8_t last_was_cr = 0;
-  uint8_t ch;
-
-  while (1)
+  if (strncasecmp(who, "LED2", strlen("LED2")) == 0)
   {
-    if (HAL_UART_Receive(&huart1, &ch, 1, HAL_MAX_DELAY) != HAL_OK)
-    {
-      return EOF;
-    }
+    printf("LED2 开始闪烁...\n");
+    LED_Link(LED2);
+  }
+  if (strncasecmp(who, "LED3", strlen("LED3")) == 0)
+  {
+    printf("LED3 开始闪烁...\n");
+    LED_Link(LED3);
+  }
+  if (strncasecmp(who, "LED4", strlen("LED4")) == 0)
+  {
+    printf("LED4 开始闪烁...\n");
+    LED_Link(LED4);
+  }
+  if (strncasecmp(who, "ALL", strlen("ALL")) == 0)
+  {
+    printf("LED1|2|3|4 开始闪烁...\n");
 
-    if (last_was_cr)
-    {
-      last_was_cr = 0;
-      if (ch == '\n')
-      {
-        continue;
-      }
-    }
-
-    if (ch == '\r')
-    {
-      last_was_cr = 1;
-      return '\n';
-    }
-
-    return (int)ch;
+    LED_Link(ALL);
   }
 }
+
+// int fputc(int ch, FILE *fp)
+// {
+//   UNUSED(fp);
+
+//   if (HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, HAL_MAX_DELAY) == HAL_OK)
+//   {
+//     return ch;
+//   }
+//   return EOF;
+// }
+
+// int fgetc(FILE *fp)
+// {
+//   UNUSED(fp);
+//   static uint8_t last_was_cr = 0;
+//   uint8_t ch;
+
+//   while (1)
+//   {
+//     if (HAL_UART_Receive(&huart1, &ch, 1, HAL_MAX_DELAY) != HAL_OK)
+//     {
+//       return EOF;
+//     }
+
+//     if (last_was_cr)
+//     {
+//       last_was_cr = 0;
+//       if (ch == '\n')
+//       {
+//         continue;
+//       }
+//     }
+
+//     if (ch == '\r')
+//     {
+//       last_was_cr = 1;
+//       return '\n';
+//     }
+
+//     return (int)ch;
+//   }
+// }
 /* USER CODE END 4 */
 
 /**
- * @brief  This function is executed in case of error occurrence.
- * @retval None
- */
+  * @brief  This function is executed in case of error occurrence.
+  * @retval None
+  */
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
@@ -279,12 +326,12 @@ void Error_Handler(void)
 }
 #ifdef USE_FULL_ASSERT
 /**
- * @brief  Reports the name of the source file and the source line number
- *         where the assert_param error has occurred.
- * @param  file: pointer to the source file name
- * @param  line: assert_param error line source number
- * @retval None
- */
+  * @brief  Reports the name of the source file and the source line number
+  *         where the assert_param error has occurred.
+  * @param  file: pointer to the source file name
+  * @param  line: assert_param error line source number
+  * @retval None
+  */
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */

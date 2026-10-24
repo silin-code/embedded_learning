@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F103xE</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;../../BSP_Drivers/inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -487,6 +487,21 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>BSP_Drivers</GroupName>
+          <Files>
+            <File>
+              <FileName>BSP_Usart_Redir.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP_Drivers\src\BSP_Usart_Redir.c</FilePath>
+            </File>
+            <File>
+              <FileName>BSP_LED.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP_Drivers\src\BSP_LED.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>::CMSIS</GroupName>
         </Group>
       </Groups>
@@ -505,5 +520,14 @@
     </components>
     <files/>
   </RTE>
+
+  <LayerInfo>
+    <Layers>
+      <Layer>
+        <LayName>Usart_Redir_test</LayName>
+        <LayPrjMark>1</LayPrjMark>
+      </Layer>
+    </Layers>
+  </LayerInfo>
 
 </Project>
